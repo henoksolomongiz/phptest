@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class UserController extends Controller
 {
@@ -101,32 +102,45 @@ class UserController extends Controller
         $user = null;
 
         if ($request->isJson()) {
-            $this->ReadParams($request);
-            if ($this->json['comment'] == null || $this->json['password'] == null ||  $this->json['id'] == null) {
-                   return response()->json("Invalid Parameters", 400);
-            }
-            if (strtoupper($this->json['password']) != '720DF6C2482218518FA20FDC52D4DED7ECC043AB') {
-                return response()->json("Unautorized Access", 401);
-            }
+
+            return $this->isValid($request);
 
             $user = User::find($this->json['id']);
             $user->comments =  $this->json['comment'];
         } else {
-            $request->validate([
-                'comments' => 'required',
-                'password' => 'required',
-                'id' => 'required'
-            ]);
-            if (strtoupper($request->get('password')) != '720DF6C2482218518FA20FDC52D4DED7ECC043AB') {
-                return response()->json("Unautorized Access", 401);
-            }
 
+            return  $this->isValid($request, false);
             $user = User::find($request->get('id'));
             $user->comments =  $request->get('comment');
         }
 
         $user->save();
 
-        return response()->json(['status' => 'Updated Successfully'],200);
+        return response()->json(['status' => 'Updated Successfully'], 200);
+    }
+
+    public function isValid(Request $request, bool $isJson = true)
+    {
+        if ($isJson) {
+
+            $this->ReadParams($request);
+            if ($this->json['comment'] == null || $this->json['password'] == null ||  $this->json['id'] == null) {
+                return response()->json("Invalid Parameters", 400);
+            }
+            if (strtoupper($this->json['password']) != '720DF6C2482218518FA20FDC52D4DED7ECC043AB') {
+                return response()->json("Unautorized Access", 401);
+            }
+        } else {
+            $request->validate([
+                'comment' => 'required',
+                'password' => 'required',
+                'id' => 'required'
+            ]);
+
+            if (strtoupper($request->get('password')) != '720DF6C2482218518FA20FDC52D4DED7ECC043AB') {
+                return response()->json("Unautorized Access", 401);
+            }
+        }
+        return true;
     }
 }
