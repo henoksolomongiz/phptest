@@ -10,4 +10,9 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    protected $json;
+    public function ReadParams($request)
+    {
+        $this->json = $request->all();
+    }
 }

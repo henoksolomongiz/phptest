@@ -1,0 +1,82 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "User API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get User Detail",
+                "operationId": "GetUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Get User",
+                        "content": {
+                            "application/html": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Update User.",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid Parameters"
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
